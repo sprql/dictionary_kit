@@ -15,30 +15,18 @@ end
 ## Usage
 
 ```elixir
-# Tokenize source text
-list = File.read!("source.txt") |> DictionaryKit.tokenize 
-# => ["Some", "words", ...]
 
-# Create dictionary of existing words
-existing_words_dict = File.read!("/usr/share/dict/words") |> DictionaryKit.string_to_map()
-# => %{"the" => true, "word" => true, ...}
+source_data = File.read!("source.txt")
+# => "Brave New World..."
 
-# Filter and normalize list by dictionary, exclude short words, remove duplicates
-min_word_length = 2
-list = list |> DictionaryKit.filter_by_dict(system_dict) |> Enum.uniq |> Enum.filter(&(String.length(&1) > min_word_length))
-# => ["some", "word", ...]
+known_words = File.read!("known_words.txt")
+# => "world brave..."
 
-# Create dictionary of known words
-known_words_dict = File.read!("known_words.txt") |> DictionaryKit.string_to_map()
-# => %{"a" => true, "the" => true, ...}
+dictionary = File.read!("/usr/share/dict/words")
+# => "a apple..."
 
-# Get known words from source list
-known_words = list |> DictionaryKit.filter_by_dict(known_words_dict)
-# => ["some", "word"]
-
-# Exlude known words from source list
-list -- known_words
-# => ["glamour"]
+DictionaryKit.find_unknown_words(source_data, known_words, dictionary)
+# => ["new"]
 ```
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
